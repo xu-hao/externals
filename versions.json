@@ -151,6 +151,29 @@
         ],
         "fpm_directories": ["bin"]
     },
+    "ghc": {
+        "commitish": "ghc-8.0.2-release",
+        "version_string": "8.0.2",
+        "license": "Glasgow Haskell Compiler License",
+        "consortium_build_number": "0",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+  "git config --global url.\"git://github.com/ghc/packages-\".insteadOf     git://github.com/ghc/packages/",
+  "git config --global url.\"http://github.com/ghc/packages-\".insteadOf    http://github.com/ghc/packages/",
+  "git config --global url.\"https://github.com/ghc/packages-\".insteadOf   https://github.com/ghc/packages/",
+  "git config --global url.\"ssh://git@github.com/ghc/packages-\".insteadOf ssh://git@github.com/ghc/packages/",
+  "git config --global url.\"git@github.com:/ghc/packages-\".insteadOf      git@github.com:/ghc/packages/",
+  "git submodule update --init",
+  "./boot",
+  "./configure --prefix=TEMPLATE_INSTALL_PREFIX",
+  "make -jTEMPLATE_JOBS",
+  "make install"
+            ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["bin", "lib", "share"]
+    },
     "imagemagick": {
         "commitish": "7.0.3-2",
         "version_string": "7.0.3",

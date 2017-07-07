@@ -210,6 +210,8 @@ def build_package(target):
             if target == 'boost':
                 # using boostorg namespace instead of forking 50+ relatively linked submodules
                 run_cmd(['git', 'clone', 'https://github.com/boostorg/boost'])
+            if target == "ghc":
+                run_cmd(['git', 'clone', 'https://github.com/ghc/ghc'])
             else:
                 run_cmd(['git', 'clone', 'https://github.com/irods/{0}'.format(target)])
         os.chdir(os.path.join(build_dir,target))

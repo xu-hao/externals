@@ -6,6 +6,7 @@ import build
 import logging
 import optparse
 import platform
+import os
 
 def main():
     # configure parser
@@ -35,12 +36,19 @@ def main():
         # get prerequisites
         cmd = ['sudo','apt-get','install','-y','make','autoconf2.13','texinfo',
                'help2man','g++','git','libtool','python-dev','libbz2-dev','zlib1g-dev',
-               'libcurl4-gnutls-dev','libxml2-dev','pkg-config','uuid-dev','libssl-dev']
+               'libcurl4-gnutls-dev','libxml2-dev','pkg-config','uuid-dev','libssl-dev','ghc', 'cabal-install']
         if pld in ['Ubuntu'] and platform.linux_distribution()[1] < '14':
             cmd.extend(['ruby1.9.1','ruby1.9.1-dev',])
         else:
             cmd.extend(['ruby','ruby-dev',])
+        if platform.linux_distribution()[1] >= '16':
+            cmd.extend(['happy','alex'])
+        else:
+            cmd.extend(['ncurses-dev'])
         build.run_cmd(cmd, check_rc='installing prerequisites failed')
+        if platform.linux_distribution()[1] < '16':
+            install_ghc_7_8()
+        os.system("curl -sSL https://get.haskellstack.org/ | sh")
         cmd = ['sudo','gem','install','-v','1.8.3','json']
         build.run_cmd(cmd, check_rc='installing json failed')
         cmd = ['sudo','gem','install','-v','1.4.0','fpm']
@@ -71,15 +79,22 @@ def main():
         # prep
         cmd = ['sudo','yum','clean','all']
         build.run_cmd(cmd, check_rc='yum clean failed')
-        cmd = ['sudo','yum','update','-y','glibc*','yum*','rpm*','python*']
+        cmd = ['sudo','yum','update','-y','glibc*','yum*','rpm*','python*','ghc','cabal-install']
         build.run_cmd(cmd, check_rc='yum update failed')
         # get prerequisites
         cmd = ['sudo','yum','install','-y','epel-release','wget']
         build.run_cmd(cmd, check_rc='installing epel failed')
         cmd = ['sudo','yum','install','-y','gcc-c++','git','autoconf','automake','texinfo',
                'help2man','rpm-build','rubygems','ruby-devel','python-devel','zlib-devel',
-               'bzip2-devel','libcurl-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel']
+               'bzip2-devel','libcurl-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel','ghc']
+        if platform.linux_distribution()[1] >= '8':
+            cmd.extend(['happy','alex'])
+        else:
+            cmd.extend(['ncurses-devel'])
         build.run_cmd(cmd, check_rc='installing prerequisites failed')
+        if platform.linux_distribution()[1] < '8':
+            install_ghc_7_8()
+        os.system("curl -sSL https://get.haskellstack.org/ | sh")
         cmd = ['sudo','gem','install','-v','1.8.3','json']
         build.run_cmd(cmd, check_rc='installing json failed')
         cmd = ['sudo','gem','install','-v','1.4.0','fpm']
@@ -120,6 +135,27 @@ def main():
         else:
             log.error('Cannot determine prerequisites for platform [{0}]'.format(pld))
             return 1
+
+def install_ghc_7_8():
+            cmd = ['wget','https://downloads.haskell.org/~ghc/7.8.4/ghc-7.8.4-src.tar.xz']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            cmd = ['tar','xvf', 'ghc-7.8.4-src.tar.xz']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            os.chdir("ghc-7.8.4")
+            cmd = ['./boot']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            cmd = ['./configure']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            cmd = ['make']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            cmd = ['sudo', 'make','install']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            os.chdir("..")
+            cmd = ['cabal', 'update']
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            cmd = ['cabal','install',"happy>=1.19.4", "alex>=3.1.0", "containers-0.5.0.0"]
+            build.run_cmd(cmd, check_rc='installing ghc failed')
+            os.environ['PATH'] = "~/.cabal/bin:" + os.environ['PATH'] 
 
 if __name__ == '__main__':
     sys.exit(main())
