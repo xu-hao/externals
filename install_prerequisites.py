@@ -137,6 +137,8 @@ def main():
             return 1
 
 def install_ghc_7_8():
+            cwd = os.path.getcwd()
+            os.chdir("/tmp")
             cmd = ['wget','https://downloads.haskell.org/~ghc/7.8.4/ghc-7.8.4-src.tar.xz']
             build.run_cmd(cmd, check_rc='installing ghc failed')
             cmd = ['tar','xvf', 'ghc-7.8.4-src.tar.xz']
@@ -155,7 +157,7 @@ def install_ghc_7_8():
             build.run_cmd(cmd, check_rc='installing ghc failed')
             cmd = ['cabal','install',"happy>=1.19.4", "alex>=3.1.0", "containers-0.5.0.0"]
             build.run_cmd(cmd, check_rc='installing ghc failed')
-            os.environ['PATH'] = "~/.cabal/bin:" + os.environ['PATH'] 
+            os.chdir(cwd)
 
 if __name__ == '__main__':
     sys.exit(main())
