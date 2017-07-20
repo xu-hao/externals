@@ -234,7 +234,7 @@ def build_package(target):
     if get_package_type() == 'osxpkg' and target in ['jansson','zeromq4-1']:
         myenv['LIBTOOLIZE'] = 'glibtoolize'
         log.debug('LIBTOOLIZE='+myenv['LIBTOOLIZE'])
-    myenv['PATH'] = "{0}:{1}".format("~/.cabal/bin", myenv['PATH'])
+    myenv['PATH'] = "{0}/.cabal/bin:{1}".format(os.path.expanduser("~"), myenv['PATH'])
 
     # build
     if target == 'clang':
