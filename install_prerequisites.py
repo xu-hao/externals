@@ -137,7 +137,7 @@ def main():
             return 1
 
 def install_ghc_7_8():
-            cwd = os.path.getcwd()
+            cwd = os.getcwd()
             os.chdir("/tmp")
             cmd = ['wget','https://downloads.haskell.org/~ghc/7.8.4/ghc-7.8.4-src.tar.xz']
             build.run_cmd(cmd, check_rc='installing ghc failed')
