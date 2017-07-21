@@ -79,14 +79,14 @@ def main():
         # prep
         cmd = ['sudo','yum','clean','all']
         build.run_cmd(cmd, check_rc='yum clean failed')
-        cmd = ['sudo','yum','update','-y','glibc*','yum*','rpm*','python*','ghc','cabal-install']
+        cmd = ['sudo','yum','update','-y','glibc*','yum*','rpm*','python*','ghc']
         build.run_cmd(cmd, check_rc='yum update failed')
         # get prerequisites
         cmd = ['sudo','yum','install','-y','epel-release','wget']
         build.run_cmd(cmd, check_rc='installing epel failed')
         cmd = ['sudo','yum','install','-y','gcc-c++','git','autoconf','automake','texinfo',
                'help2man','rpm-build','rubygems','ruby-devel','python-devel','zlib-devel',
-               'bzip2-devel','libcurl-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel','ghc']
+               'bzip2-devel','libcurl-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel','ghc', 'cabal-install']
         if platform.linux_distribution()[1] >= '8':
             cmd.extend(['happy','alex'])
         else:
