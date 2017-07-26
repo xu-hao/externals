@@ -246,8 +246,8 @@ def build_package(target):
     for i in itertools.chain(v['build_steps'], v['external_build_steps']):
         i = re.sub("TEMPLATE_JOBS", str(get_jobs()), i)
         i = re.sub("TEMPLATE_SCRIPT_PATH", script_path, i)
-        i = re.sub("TEMPLATE_INSTALL_PREFIX", install_prefix, i)
         i = re.sub("TEMPLATE_INSTALL_PREFIX_SYS", install_prefix_sys, i)
+        i = re.sub("TEMPLATE_INSTALL_PREFIX", install_prefix, i)
         i = re.sub("TEMPLATE_CLANG_CPP_HEADERS", clang_cpp_headers, i)
         i = re.sub("TEMPLATE_CLANG_CPP_LIBRARIES", clang_cpp_libraries, i)
         i = re.sub("TEMPLATE_CLANG_SUBDIRECTORY", clang_subdirectory, i)

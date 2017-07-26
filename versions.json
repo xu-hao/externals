@@ -169,7 +169,7 @@
   "make -jTEMPLATE_JOBS",
   "sudo make install",
   "sudo cp -r TEMPLATE_INSTALL_PREFIX_SYS/* TEMPLATE_INSTALL_PREFIX",
-  "sudo chown -R irodsbuild:irodsbuild TEMPLATE_INSTALL_PREFIX"
+  "sudo chown -R irodsbuild:external TEMPLATE_INSTALL_PREFIX"
             ],
         "external_build_steps": [
             "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
