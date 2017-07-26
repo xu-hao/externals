@@ -125,7 +125,8 @@ def build_package(target):
     v = get_versions()[target]
     package_subdirectory = '{0}{1}-{2}'.format(target, v['version_string'], v['consortium_build_number'])
     build_dir = os.path.join(script_path, '{0}_src'.format(package_subdirectory))
-    install_prefix = os.path.join(build_dir, v['externals_root'], package_subdirectory)
+    install_prefix_sys = os.path.join('/', v['externals_root'], package_subdirectory)
+    install_prefix = os.path.join(build_dir, install_prefix_sys)
     log.info(install_prefix)
 
     # prepare executables
@@ -246,6 +247,7 @@ def build_package(target):
         i = re.sub("TEMPLATE_JOBS", str(get_jobs()), i)
         i = re.sub("TEMPLATE_SCRIPT_PATH", script_path, i)
         i = re.sub("TEMPLATE_INSTALL_PREFIX", install_prefix, i)
+        i = re.sub("TEMPLATE_INSTALL_PREFIX_SYS", install_prefix_sys, i)
         i = re.sub("TEMPLATE_CLANG_CPP_HEADERS", clang_cpp_headers, i)
         i = re.sub("TEMPLATE_CLANG_CPP_LIBRARIES", clang_cpp_libraries, i)
         i = re.sub("TEMPLATE_CLANG_SUBDIRECTORY", clang_subdirectory, i)
