@@ -157,7 +157,7 @@
         "license": "Glasgow Haskell Compiler License",
         "consortium_build_number": "0",
         "externals_root": "opt/irods-externals",
-        "build_steps0": [
+        "build_steps": [
   "git config --global url.\"git://github.com/ghc/packages-\".insteadOf     git://github.com/ghc/packages/",
   "git config --global url.\"http://github.com/ghc/packages-\".insteadOf    http://github.com/ghc/packages/",
   "git config --global url.\"https://github.com/ghc/packages-\".insteadOf   https://github.com/ghc/packages/",
@@ -167,8 +167,7 @@
   "./boot",
   "./configure --prefix=TEMPLATE_INSTALL_PREFIX_SYS",
   "make -jTEMPLATE_JOBS",
-  "sudo make install"],
-        "build_steps": [
+  "sudo make install"
   "mkdir -p TEMPLATE_INSTALL_PREFIX",
   "sudo cp -r TEMPLATE_INSTALL_PREFIX_SYS/* TEMPLATE_INSTALL_PREFIX",
   "sudo chown -R irodsbuild:external TEMPLATE_INSTALL_PREFIX"
