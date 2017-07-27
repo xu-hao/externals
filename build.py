@@ -242,7 +242,7 @@ def build_package(target):
         myenv['PATH'] = '{0}:{1}'.format(autoconf_bindir, myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
     if target in ['ghc']:
-        clang_bindir = '{0}/bin'.format(get_install_path('clang'))
+        clang_bindir = get_install_path('clang',['bin'])
         myenv['CC'] = '{0}/clang'.format(clang_bindir)
         log.debug('CC='+myenv['CC'])
         myenv['CXX'] = '{0}/clang++'.format(clang_bindir)
@@ -255,7 +255,7 @@ def build_package(target):
         myenv['PATH'] = os.path.join("{0}/.cabal/bin".format(os.path.expanduser("~")), myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
         t = get_package_type()
-        p = get_package_name('clang')
+        p = get_package_filename('clang')
         if t == 'rpm':
                 run_cmd(['sudo', 'yum', 'install', p])
         elif t == 'deb':
