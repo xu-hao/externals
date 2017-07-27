@@ -125,8 +125,9 @@ def build_package(target):
     v = get_versions()[target]
     package_subdirectory = '{0}{1}-{2}'.format(target, v['version_string'], v['consortium_build_number'])
     build_dir = os.path.join(script_path, '{0}_src'.format(package_subdirectory))
-    install_prefix_sys = os.path.join('/', v['externals_root'], package_subdirectory)
-    install_prefix = os.path.join(build_dir, install_prefix_sys)
+    install_prefix_suffix = os.path.join(v['externals_root'], package_subdirectory)
+    install_prefix_sys = os.path.join('/', install_prefix_suffix)
+    install_prefix = os.path.join(build_dir, install_prefix_suffix)
     log.info(install_prefix)
 
     # prepare executables
