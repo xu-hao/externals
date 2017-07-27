@@ -37,6 +37,14 @@ def get_local_path(package_name, path_elements):
     log.debug('local path: {0}'.format(local_path))
     return local_path
 
+def get_install_path(package_name, path_elements):
+    log = logging.getLogger(__name__)
+    p = get_versions()[package_name]
+    path_name = '{0}{1}-{2}'.format(package_name, p['version_string'], p['consortium_build_number'])
+    local_path = os.path.join('/', p['externals_root'], path_name, *path_elements)
+    log.debug('install path: {0}'.format(local_path))
+    return local_path
+
 def run_cmd(cmd, run_env=False, unsafe_shell=False, check_rc=False):
     log = logging.getLogger(__name__)
     # run it
@@ -222,7 +230,7 @@ def build_package(target):
 
     # set environment
     myenv = os.environ.copy()
-    if target not in ['clang','cmake','autoconf','cpython']:
+    if target not in ['clang','cmake','autoconf','cpython','ghc']:
         clang_bindir = get_local_path('clang',['bin'])
         myenv['CC'] = '{0}/clang'.format(clang_bindir)
         log.debug('CC='+myenv['CC'])
@@ -233,10 +241,28 @@ def build_package(target):
         autoconf_bindir = get_local_path('autoconf',['bin'])
         myenv['PATH'] = '{0}:{1}'.format(autoconf_bindir, myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
+    if target in ['ghc']:
+        clang_bindir = '{0}/bin'.format(get_install_path('clang'))
+        myenv['CC'] = '{0}/clang'.format(clang_bindir)
+        log.debug('CC='+myenv['CC'])
+        myenv['CXX'] = '{0}/clang++'.format(clang_bindir)
+        log.debug('CXX='+myenv['CXX'])
+        myenv['PATH'] = '{0}:{1}'.format(clang_bindir, myenv['PATH'])
+        log.debug('PATH='+myenv['PATH'])
+        autoconf_bindir = get_local_path('autoconf',['bin'])
+        myenv['PATH'] = '{0}:{1}'.format(autoconf_bindir, myenv['PATH'])
+        log.debug('PATH='+myenv['PATH'])
+        myenv['PATH'] = os.path.join("{0}/.cabal/bin".format(os.path.expanduser("~")), myenv['PATH'])
+        log.debug('PATH='+myenv['PATH'])
+        t = get_package_type()
+        p = get_package_name('clang')
+        if t == 'rpm':
+                run_cmd(['sudo', 'yum', 'install', p)
+        elif t == 'deb':
+                run_cmd(['sudo', 'dpkg', '-i', p)
     if get_package_type() == 'osxpkg' and target in ['jansson','zeromq4-1']:
         myenv['LIBTOOLIZE'] = 'glibtoolize'
         log.debug('LIBTOOLIZE='+myenv['LIBTOOLIZE'])
-    myenv['PATH'] = "{0}/.cabal/bin:{1}".format(os.path.expanduser("~"), myenv['PATH'])
 
     # build
     if target == 'clang':
