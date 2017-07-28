@@ -255,11 +255,11 @@ def build_package(target):
         myenv['PATH'] = os.path.join("{0}/.cabal/bin".format(os.path.expanduser("~")), myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
         t = get_package_type()
-        p = get_package_filename('clang')
+        p = os.path.join(script_path, get_package_filename('clang'))
         if t == 'rpm':
-                run_cmd(['sudo', 'yum', 'install', p])
+                run_cmd(['sudo', 'yum', 'install', p], check_rc='install clang failed')
         elif t == 'deb':
-                run_cmd(['sudo', 'dpkg', '-i', p])
+                run_cmd(['sudo', 'dpkg', '-i', p], check_rc='install clang failed')
     if get_package_type() == 'osxpkg' and target in ['jansson','zeromq4-1']:
         myenv['LIBTOOLIZE'] = 'glibtoolize'
         log.debug('LIBTOOLIZE='+myenv['LIBTOOLIZE'])
