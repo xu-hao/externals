@@ -167,7 +167,7 @@
   "./boot",
   "./configure --prefix=TEMPLATE_INSTALL_PREFIX_SYS",
   "make -jTEMPLATE_JOBS",
-  "sudo make install"
+  "sudo make install",
   "mkdir -p TEMPLATE_INSTALL_PREFIX",
   "sudo cp -r TEMPLATE_INSTALL_PREFIX_SYS/* TEMPLATE_INSTALL_PREFIX",
   "sudo chown -R irodsbuild:external TEMPLATE_INSTALL_PREFIX"
