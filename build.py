@@ -252,7 +252,7 @@ def build_package(target):
         autoconf_bindir = get_local_path('autoconf',['bin'])
         myenv['PATH'] = '{0}:{1}'.format(autoconf_bindir, myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
-        myenv['PATH'] = os.path.join("{0}/.cabal/bin".format(os.path.expanduser("~")), myenv['PATH'])
+        myenv['PATH'] = '{0}:{1}'.format("{0}/.cabal/bin".format(os.path.expanduser("~")), myenv['PATH'])
         log.debug('PATH='+myenv['PATH'])
         t = get_package_type()
         p = os.path.join(script_path, get_package_filename('clang'))
