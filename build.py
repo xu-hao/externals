@@ -257,7 +257,7 @@ def build_package(target):
         t = get_package_type()
         p = os.path.join(script_path, get_package_filename('clang'))
         if t == 'rpm':
-                run_cmd(['sudo', 'yum', 'install', p], check_rc='install clang failed')
+                run_cmd(['sudo', 'yum', 'install', '-y', p], check_rc='install clang failed')
         elif t == 'deb':
                 run_cmd(['sudo', 'dpkg', '-i', p], check_rc='install clang failed')
     if get_package_type() == 'osxpkg' and target in ['jansson','zeromq4-1']:
